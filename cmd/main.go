@@ -2,7 +2,9 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"miner/pkg/cli"
+	"miner/pkg/plan"
 )
 
 func main() {
@@ -14,8 +16,13 @@ func main() {
 
 	args, err := cli.ParseArgs().Validate()
 	if err != nil {
-		fmt.Printf("%s\n", err)
+		log.Fatalf("%s", err)
 	}
 
-	fmt.Printf(args.PlanPath)
+	plan, err := plan.LoadPlan(args.PlanPath)
+	if err != nil {
+		log.Fatalf("%s", err)
+	}
+
+	plan.Execute()
 }
